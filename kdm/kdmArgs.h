@@ -10,7 +10,7 @@
 #import "FMDB.h"
 
 @interface kdmArgs : NSObject {
-	FMDatabase *_db;
+	FMDatabaseQueue *_queue;
 }
 @property (retain) NSMutableArray *sources;
 + (kdmArgs*)initWithArguments:(NSArray*)args;

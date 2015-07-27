@@ -18,7 +18,7 @@ int main(int argc, const char * argv[]) {
 			goto help;
 		}
 		
-		if (([arguments[1]  isEqualToString: @"install"] || [arguments[1]  isEqualToString: @"remove"] || [arguments[1] isEqualToString:@"add-repo"] || [arguments[1] isEqualToString:@"check"]) && [arguments count] < 3) {
+		if (([arguments[1]  isEqualToString: @"install"] || [arguments[1]  isEqualToString: @"remove"] || [arguments[1] isEqualToString:@"add-repo"] || [arguments[1] isEqualToString:@"check"] || [arguments[1] isEqualToString:@"remove-repo"]) && [arguments count] < 3) {
 			goto help;
 		}
 		
@@ -34,7 +34,7 @@ int main(int argc, const char * argv[]) {
 help:
 	LOG("kdm");
 	LOG("\nUSAGE:");
-	LOG("   kdm [update|install (package id)|remove (package id)|check (package id)|setup]");
+	LOG("   kdm [update|install (package id)|remove (package id)|autoremove|list|check (package id)|setup|add-repo (repo url)|remove-repo (repo url)|upgrade]");
 	
 	LOG("\n(C) Copyright 2015 Mustafa Gezen");
 	return 0;

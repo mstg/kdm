@@ -22,6 +22,7 @@
 	for (NSString *key in info) {
 		NSUInteger item = [possibleValues indexOfObject:key];
 		id value = [info objectForKey:key];
+		
 		switch (item) {
 			case 0:
 				this->_packageID = value;
@@ -63,13 +64,13 @@
 				this->_section = value;
 				break;
 			case 11:
-				this->_pkgDescription = value;
+				this->_pkgDescription = value = [value stringByReplacingOccurrencesOfString:@"'" withString:@"%27"];;
 				break;
 			case 12:
-				this->_author = value;
+				this->_author = value = [value stringByReplacingOccurrencesOfString:@"'" withString:@"%27"];;
 				break;
 			case 13:
-				this->_packageName = value;
+				this->_packageName = value = [value stringByReplacingOccurrencesOfString:@"'" withString:@"%27"];;
 				break;
 			case 14:
 				this->_icon = value;

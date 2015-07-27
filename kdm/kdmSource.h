@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "kdmPackage.h"
 #import "AFNetworking/AFNetworking.h"
+#import "FMDB.h"
 
 typedef struct {
 	char *label;
@@ -22,8 +23,9 @@ typedef struct {
 	NSMutableArray *_packages;
 	ReleaseStruct _rel;
 	NSMutableArray *_installedPackages;
+	FMDatabaseQueue *_db;
 }
-+ (kdmSource*)initWithSourceURL:(NSString*)url;
++ (kdmSource*)initWithSourceURL:(NSString*)url db:(FMDatabaseQueue*)db;
 + (kdmSource*)initWithCache:(NSDictionary*)info;
 - (kdmPackage*)findPackageByIdentifier:(NSString*)identifier;
 - (kdmPackage*)dependencyWithIdentifier:(NSString*)identifier;

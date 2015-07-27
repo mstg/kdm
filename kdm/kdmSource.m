@@ -12,9 +12,10 @@
 #import "kdmPackage.h"
 
 @implementation kdmSource
-+ (kdmSource*)initWithSourceURL:(NSString*)url {
++ (kdmSource*)initWithSourceURL:(NSString*)url db:(FMDatabaseQueue*)db {
 	kdmSource *this = [[kdmSource alloc] init];
 	this->_source = url;
+	this->_db = db;
 	
 	this->_manager = [AFHTTPSessionManager manager];
 	this->_semaphore = dispatch_semaphore_create(0);
@@ -28,7 +29,12 @@
 	this->_installedPackages = [[NSMutableArray alloc] init];
 	
 	[this parseRelease];
-	[this parsePackages];
+	
+	[this->_db inDatabase:^(FMDatabase *db) {
+		[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO `sources` VALUES ('%@', '%s', '%s')", this.source, this.rel.label, this.rel.description]];
+	}];
+	
+	[this parsePackagesBZ2];
 	
 	DEBUGLOG("Finished scanning packages for %s", [url UTF8String]);
 	
@@ -51,7 +57,7 @@
 }
 
 - (void)parseRelease {
-	[self->_manager GET:[self.source stringByAppendingPathComponent:@"Release"] parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+	[self->_manager GET:[self.source stringByAppendingPathComponent:@"dists/stable/Release"] parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
 		NSData *responseData = responseObject;
 		NSString *responseString = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
 		
@@ -59,7 +65,7 @@
 		
 		dispatch_semaphore_signal(self->_semaphore);
 	} failure:^(NSURLSessionDataTask *task, NSError *error) {
-		NLOG(error);
+		LOG("Error parsing repo: %s", [self.source UTF8String]);
 		dispatch_semaphore_signal(self->_semaphore);
 	}];
 	
@@ -100,7 +106,7 @@
 
 		dispatch_semaphore_signal(self->_semaphore);
 	} failure:^(NSURLSessionDataTask *task, NSError *error) {
-		[self parsePackagesBZ2];
+		LOG("Error parsing repo: %s", [self.source UTF8String]);
 		dispatch_semaphore_signal(self->_semaphore);
 	}];
 	
@@ -108,14 +114,14 @@
 }
 
 - (void)parsePackagesBZ2 {
-	[self->_manager GET:[self.source stringByAppendingPathComponent:@"Packages.bz2"] parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+	[self->_manager GET:[self.source stringByAppendingPathComponent:@"dists/stable/main/binary-iphoneos-arm/Packages.bz2"] parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
 		NSString *responseString = decompress(responseObject);
 		
 		[self _parsePackages:responseString];
 		
 		dispatch_semaphore_signal(self->_semaphore);
 	} failure:^(NSURLSessionDataTask *task, NSError *error) {
-		NLOG(error);
+		[self parsePackages];
 		dispatch_semaphore_signal(self->_semaphore);
 	}];
 	
@@ -123,23 +129,49 @@
 }
 
 - (void)_parsePackages:(NSString*)packages {
-	NSArray *splitted = [packages componentsSeparatedByString:@"\n"];
-	
 	NSMutableDictionary *currentVal = [[NSMutableDictionary alloc] init];
-	for (NSString *line in splitted) {
-		if ([line length] > 2) {
-			NSRange range = [line rangeOfString:@":"];
-			
-			if (range.location != NSNotFound) {
-				NSString *field = [[line substringToIndex:range.location] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-				NSString *value = [[line substringFromIndex:NSMaxRange(range)] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-				[currentVal setValue:value forKey:field];
-			}
-		} else {
-			kdmPackage *package = [kdmPackage initWithPackageInformation:currentVal sourceURL:self->_source];
-			if (![self.packages containsObject:package] && [currentVal count] >= 3) {
-				[self.packages addObject:package];
-				[currentVal removeAllObjects];
+	NSRange range = NSMakeRange(0, packages.length);
+	while (range.location != NSNotFound) {
+		NSRange nextRange = [packages rangeOfString:@"\n\n" options:NSLiteralSearch range:NSMakeRange(range.location + 2, packages.length - range.location - 2)];
+		
+		NSUInteger end = nextRange.location;
+		if (end == NSNotFound) {
+			end = packages.length;
+		}
+		
+		NSString *segment = [packages substringWithRange:NSMakeRange(range.location, end - range.location)];
+		range = nextRange;
+		
+		NSArray *lines = [segment componentsSeparatedByString:@"\n"];
+		
+		for (NSString *line in lines) {
+			if ([line length] > 2) {
+				NSRange keyRange = [segment rangeOfString:@":"];
+				if (keyRange.location != NSNotFound) {
+					NSString *field = [[segment substringToIndex:keyRange.location] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+					NSString *value = [[segment substringFromIndex:NSMaxRange(keyRange)] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+					[currentVal setValue:value forKey:field];
+				}
+			} else {
+				kdmPackage *package = [kdmPackage initWithPackageInformation:currentVal sourceURL:self->_source];
+				if (![self.packages containsObject:package] && [currentVal count] >= 3) {
+					[self.packages addObject:package];
+					
+					NSMutableString *dependString = [[NSMutableString alloc] init];
+					for (NSString *string in package.dependencies) {
+						[dependString appendString:[NSString stringWithFormat:@"%@,", string]];
+					}
+					
+					if ([dependString length] > 0 && [[dependString substringToIndex:[dependString length] - 1] isEqualToString:@","]) {
+						dependString = [[dependString substringToIndex:[dependString length] - 1] mutableCopy];
+					}
+					
+					[self->_db inDatabase:^(FMDatabase *db) {
+						[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO `packages` VALUES ('%@', '%@', '%@', '%@', '%d','%@', '%@',  '%d', '%@', '%@', '%@', '%@', '%@', '%@', '%@', '%@')", package.sourceURL, package.packageID, package.version, package.maintainer, package.installedSize, dependString, [package.fileURL stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@/", package.sourceURL] withString:@""], package.size, package.md5Sum, package.sha1Sum, package.sha256Sum, package.section, package.pkgDescription, package.author, package.icon, package.packageName]];
+					}];
+					
+					[currentVal removeAllObjects];
+				}
 			}
 		}
 	}
