@@ -129,49 +129,37 @@
 }
 
 - (void)_parsePackages:(NSString*)packages {
+	NSArray *splitted = [packages componentsSeparatedByString:@"\n"];
+	
 	NSMutableDictionary *currentVal = [[NSMutableDictionary alloc] init];
-	NSRange range = NSMakeRange(0, packages.length);
-	while (range.location != NSNotFound) {
-		NSRange nextRange = [packages rangeOfString:@"\n\n" options:NSLiteralSearch range:NSMakeRange(range.location + 2, packages.length - range.location - 2)];
-		
-		NSUInteger end = nextRange.location;
-		if (end == NSNotFound) {
-			end = packages.length;
-		}
-		
-		NSString *segment = [packages substringWithRange:NSMakeRange(range.location, end - range.location)];
-		range = nextRange;
-		
-		NSArray *lines = [segment componentsSeparatedByString:@"\n"];
-		
-		for (NSString *line in lines) {
-			if ([line length] > 2) {
-				NSRange keyRange = [segment rangeOfString:@":"];
-				if (keyRange.location != NSNotFound) {
-					NSString *field = [[segment substringToIndex:keyRange.location] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-					NSString *value = [[segment substringFromIndex:NSMaxRange(keyRange)] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-					[currentVal setValue:value forKey:field];
+	for (NSString *line in splitted) {
+		if ([line length] > 2) {
+			NSRange range = [line rangeOfString:@":"];
+			
+			if (range.location != NSNotFound) {
+				NSString *field = [[line substringToIndex:range.location] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+				NSString *value = [[line substringFromIndex:NSMaxRange(range)] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+				[currentVal setValue:value forKey:field];
+			}
+		} else {
+			kdmPackage *package = [kdmPackage initWithPackageInformation:currentVal sourceURL:self->_source];
+			if (![self.packages containsObject:package] && [currentVal count] >= 3) {
+				[self.packages addObject:package];
+				
+				NSMutableString *dependString = [[NSMutableString alloc] init];
+				for (NSString *string in package.dependencies) {
+					[dependString appendString:[NSString stringWithFormat:@"%@,", string]];
 				}
-			} else {
-				kdmPackage *package = [kdmPackage initWithPackageInformation:currentVal sourceURL:_source];
-				if (![self.packages containsObject:package] && [currentVal count] >= 3) {
-					[self.packages addObject:package];
-					
-					NSMutableString *dependString = [[NSMutableString alloc] init];
-					for (NSString *string in package.dependencies) {
-						[dependString appendString:[NSString stringWithFormat:@"%@,", string]];
-					}
-					
-					if ([dependString length] > 0 && [[dependString substringToIndex:[dependString length] - 1] isEqualToString:@","]) {
-						dependString = [[dependString substringToIndex:[dependString length] - 1] mutableCopy];
-					}
-					
-					[_db inDatabase:^(FMDatabase *db) {
-						[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO `packages` VALUES ('%@', '%@', '%@', '%@', '%d','%@', '%@',  '%d', '%@', '%@', '%@', '%@', '%@', '%@', '%@', '%@')", package.sourceURL, package.packageID, package.version, package.maintainer, package.installedSize, dependString, [package.fileURL stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@/", package.sourceURL] withString:@""], package.size, package.md5Sum, package.sha1Sum, package.sha256Sum, package.section, package.pkgDescription, package.author, package.icon, package.packageName]];
-					}];
-					
-					[currentVal removeAllObjects];
+				
+				if ([dependString length] > 0 && [[dependString substringToIndex:[dependString length] - 1] isEqualToString:@","]) {
+					dependString = [[dependString substringToIndex:[dependString length] - 1] mutableCopy];
 				}
+				
+				[self->_db inDatabase:^(FMDatabase *db) {
+					[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO `packages` VALUES ('%@', '%@', '%@', '%@', '%d','%@', '%@',  '%d', '%@', '%@', '%@', '%@', '%@', '%@', '%@', '%@')", package.sourceURL, package.packageID, package.version, package.maintainer, package.installedSize, dependString, [package.fileURL stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@/", package.sourceURL] withString:@""], package.size, package.md5Sum, package.sha1Sum, package.sha256Sum, package.section, package.pkgDescription, package.author, package.icon, package.packageName]];
+				}];
+				
+				[currentVal removeAllObjects];
 			}
 		}
 	}

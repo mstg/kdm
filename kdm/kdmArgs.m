@@ -21,7 +21,7 @@
 		this->_queue = [FMDatabaseQueue databaseQueueWithPath:[kdmCacheFolder stringByAppendingPathComponent:@"cache.db"]];
 	}
 	
-	if (![[NSFileManager defaultManager] fileExistsAtPath:kdmFolder]) {
+	if ([[NSFileManager defaultManager] fileExistsAtPath:[kdmCacheFolder stringByAppendingPathComponent:@"cache.db"]]) {
 		[this setupCache];
 	}
 	
@@ -116,7 +116,7 @@
 	}
 }
 - (void)update {
-	[_queue inTransaction:^(FMDatabase *db, BOOL *rollback) {
+	[_queue inDatabase:^(FMDatabase *db) {
 		[db executeUpdate:@"CREATE TABLE IF NOT EXISTS `sources` (`source` TEXT, `releaseLabel` TEXT, `releaseDescription` TEXT);"];
 		[db executeUpdate:@"DELETE FROM sources;"];
 		
