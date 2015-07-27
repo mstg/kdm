@@ -155,7 +155,7 @@
 					dependString = [[dependString substringToIndex:[dependString length] - 1] mutableCopy];
 				}
 				
-				[self->_db inDatabase:^(FMDatabase *db) {
+				[_db inDatabase:^(FMDatabase *db) {
 					[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO `packages` VALUES ('%@', '%@', '%@', '%@', '%d','%@', '%@',  '%d', '%@', '%@', '%@', '%@', '%@', '%@', '%@', '%@')", package.sourceURL, package.packageID, package.version, package.maintainer, package.installedSize, dependString, [package.fileURL stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@/", package.sourceURL] withString:@""], package.size, package.md5Sum, package.sha1Sum, package.sha256Sum, package.section, package.pkgDescription, package.author, package.icon, package.packageName]];
 				}];
 				
