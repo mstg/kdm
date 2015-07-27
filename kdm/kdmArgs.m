@@ -17,13 +17,13 @@
 	kdmArgs *this = [[kdmArgs alloc] init];
 	this.sources = [[NSMutableArray alloc] init];
 	
-	if (![[NSFileManager defaultManager] fileExistsAtPath:[kdmCacheFolder stringByAppendingPathComponent:@"cache.db"]]) {
-		[[[FMDatabase alloc] initWithPath:[kdmCacheFolder stringByAppendingPathComponent:@"cache.db"]] close];
+	if ([[NSFileManager defaultManager] fileExistsAtPath:[kdmCacheFolder stringByAppendingPathComponent:@"cache.db"]]) {
+		this->_queue = [FMDatabaseQueue databaseQueueWithPath:[kdmCacheFolder stringByAppendingPathComponent:@"cache.db"]];
 	}
-
-	this->_queue = [FMDatabaseQueue databaseQueueWithPath:[kdmCacheFolder stringByAppendingPathComponent:@"cache.db"]];
 	
-	[this setupCache];
+	if (![[NSFileManager defaultManager] fileExistsAtPath:kdmFolder]) {
+		[this setupCache];
+	}
 	
 	if ([args[1] isEqualToString:@"setup"]) {
 		[this setup];
@@ -110,6 +110,9 @@
 		NSString *content = @"http://repo.alexzielenski.com";
 		NSData *fileContents = [content dataUsingEncoding:NSUTF8StringEncoding];
 		[[NSFileManager defaultManager] createFileAtPath:kdmSources contents:fileContents attributes:nil];
+		FMDatabase *db = [[FMDatabase alloc] initWithPath:[kdmCacheFolder stringByAppendingPathComponent:@"cache.db"]];
+		[db open];
+		[db close];
 	}
 }
 - (void)update {
