@@ -3,6 +3,7 @@ simple dependency manager (which is also a package manager), but it sucks
 
 # Installation
 ```
+pod install
 Install dpkg
 Build kpm
 ```
