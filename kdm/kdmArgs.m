@@ -16,6 +16,10 @@
 + (kdmArgs*)initWithArguments:(NSArray*)args {
 	kdmArgs *this = [[kdmArgs alloc] init];
 	this.sources = [[NSMutableArray alloc] init];
+	
+	if (![[NSFileManager defaultManager] fileExistsAtPath:[kdmCacheFolder stringByAppendingPathComponent:@"cache.db"]]) {
+		[[[FMDatabase alloc] initWithPath:[kdmCacheFolder stringByAppendingPathComponent:@"cache.db"]] close];
+	}
 
 	this->_queue = [FMDatabaseQueue databaseQueueWithPath:[kdmCacheFolder stringByAppendingPathComponent:@"cache.db"]];
 	
@@ -47,7 +51,7 @@
 }
 
 - (void)setupCache {
-	[self->_queue inTransaction:^(FMDatabase *db, BOOL *rollback) {
+	[_queue inTransaction:^(FMDatabase *db, BOOL *rollback) {
 		[db executeUpdate:@"CREATE TABLE IF NOT EXISTS `installed` ( `packageID` TEXT, `type` TEXT, `version` TEXT);"];
 		
 		FMResultSet *s = [db executeQuery:@"SELECT * FROM sources"];
@@ -109,7 +113,7 @@
 	}
 }
 - (void)update {
-	[self->_queue inTransaction:^(FMDatabase *db, BOOL *rollback) {
+	[_queue inTransaction:^(FMDatabase *db, BOOL *rollback) {
 		[db executeUpdate:@"CREATE TABLE IF NOT EXISTS `sources` (`source` TEXT, `releaseLabel` TEXT, `releaseDescription` TEXT);"];
 		[db executeUpdate:@"DELETE FROM sources;"];
 		
@@ -137,7 +141,7 @@
 		range = nextRange;
 		
 		LOG("Scanning repository %s", [segment UTF8String]);
-		kdmSource *source = [kdmSource initWithSourceURL:segment db:self->_queue];
+		kdmSource *source = [kdmSource initWithSourceURL:segment db:_queue];
 		[self.sources addObject:source];
 	}
 }
@@ -157,7 +161,7 @@
 	[self update];
 	NSMutableArray *upgradePkgs = [[NSMutableArray alloc] init];
 	
-	[self->_queue inTransaction:^(FMDatabase *db, BOOL *rollback) {
+	[_queue inTransaction:^(FMDatabase *db, BOOL *rollback) {
 		FMResultSet *_s_ = [db executeQuery:@"SELECT * FROM installed"];
 		
 		while ([_s_ next]) {
@@ -178,7 +182,7 @@
 }
 
 - (void)install:(NSString*)identifier type:(NSString*)type {
-	[self->_queue inTransaction:^(FMDatabase *db, BOOL *rollback) {
+	[_queue inTransaction:^(FMDatabase *db, BOOL *rollback) {
 		[db executeUpdate:@"CREATE TABLE IF NOT EXISTS `installed` ( `packageID` TEXT, `type` TEXT, `version` TEXT);"];
 	}];
 	
@@ -198,7 +202,7 @@
 					
 					if (result.result == 1) {
 						LOG("Successfully installed %s", [pkg.packageName UTF8String]);
-						[self->_queue inTransaction:^(FMDatabase *db, BOOL *rollback) {
+						[_queue inTransaction:^(FMDatabase *db, BOOL *rollback) {
 							[db executeUpdate:[NSString stringWithFormat:@"DELETE FROM `installed` WHERE packageID='%@'", pkg.packageID]];
 							[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO `installed` VALUES('%@', '%@', '%@')", pkg.packageID, type, pkg.version]];
 						}];
@@ -228,7 +232,7 @@
 			[dpkg dpkg_remove:identifier completion:^(struct dpkg_result result) {
 				if (result.result == 1) {
 					LOG("Successfully removed %s", [pkg.packageName UTF8String]);
-					[self->_queue inTransaction:^(FMDatabase *db, BOOL *rollback) {
+					[_queue inTransaction:^(FMDatabase *db, BOOL *rollback) {
 						[db executeUpdate:[NSString stringWithFormat:@"DELETE FROM `installed` WHERE packageID='%@'", pkg.packageID]];
 					}];
 				} else {
@@ -293,7 +297,7 @@
 - (void)autoremove {
 	NSMutableArray *dependencies = [[NSMutableArray alloc] init];
 	
-	[self->_queue inTransaction:^(FMDatabase *db, BOOL *rollback) {
+	[_queue inTransaction:^(FMDatabase *db, BOOL *rollback) {
 		FMResultSet *s_ = [db executeQuery:@"SELECT * FROM installed"];
 		while ([s_ next]) {
 		if ([[s_ stringForColumn:@"type"] isEqualToString:@"dependency"]) {

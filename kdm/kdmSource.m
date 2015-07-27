@@ -36,7 +36,7 @@
 	
 	[this parsePackagesBZ2];
 	
-	DEBUGLOG("Finished scanning packages for %s", [url UTF8String]);
+	LOG("Finished scanning packages for %s", [url UTF8String]);
 	
 	return this;
 }
@@ -57,19 +57,19 @@
 }
 
 - (void)parseRelease {
-	[self->_manager GET:[self.source stringByAppendingPathComponent:@"dists/stable/Release"] parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+	[_manager GET:[self.source stringByAppendingPathComponent:@"Release"] parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
 		NSData *responseData = responseObject;
 		NSString *responseString = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
 		
 		[self _parseRelease:responseString];
 		
-		dispatch_semaphore_signal(self->_semaphore);
+		dispatch_semaphore_signal(_semaphore);
 	} failure:^(NSURLSessionDataTask *task, NSError *error) {
 		LOG("Error parsing repo: %s", [self.source UTF8String]);
-		dispatch_semaphore_signal(self->_semaphore);
+		dispatch_semaphore_signal(_semaphore);
 	}];
 	
-	dispatch_semaphore_wait(self->_semaphore, DISPATCH_TIME_FOREVER);
+	dispatch_semaphore_wait(_semaphore, DISPATCH_TIME_FOREVER);
 }
 
 - (void)_parseRelease:(NSString*)release {
@@ -89,11 +89,11 @@
 		}
 	}
 	
-	self->_rel = rel;
+	_rel = rel;
 }
 
 - (void)parsePackages {
-	[self->_manager GET:[self.source stringByAppendingPathComponent:@"Packages"] parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+	[_manager GET:[self.source stringByAppendingPathComponent:@"Packages"] parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
 		NSString *responseString;
 		if ([responseObject class] == [NSString class]) {
 			responseString = responseObject;
@@ -104,28 +104,28 @@
 		
 		[self _parsePackages:responseString];
 
-		dispatch_semaphore_signal(self->_semaphore);
+		dispatch_semaphore_signal(_semaphore);
 	} failure:^(NSURLSessionDataTask *task, NSError *error) {
 		LOG("Error parsing repo: %s", [self.source UTF8String]);
-		dispatch_semaphore_signal(self->_semaphore);
+		dispatch_semaphore_signal(_semaphore);
 	}];
 	
-	dispatch_semaphore_wait(self->_semaphore, DISPATCH_TIME_FOREVER);
+	dispatch_semaphore_wait(_semaphore, DISPATCH_TIME_FOREVER);
 }
 
 - (void)parsePackagesBZ2 {
-	[self->_manager GET:[self.source stringByAppendingPathComponent:@"dists/stable/main/binary-iphoneos-arm/Packages.bz2"] parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+	[_manager GET:[self.source stringByAppendingPathComponent:@"Packages.bz2"] parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
 		NSString *responseString = decompress(responseObject);
 		
 		[self _parsePackages:responseString];
 		
-		dispatch_semaphore_signal(self->_semaphore);
+		dispatch_semaphore_signal(_semaphore);
 	} failure:^(NSURLSessionDataTask *task, NSError *error) {
 		[self parsePackages];
-		dispatch_semaphore_signal(self->_semaphore);
+		dispatch_semaphore_signal(_semaphore);
 	}];
 	
-	dispatch_semaphore_wait(self->_semaphore, DISPATCH_TIME_FOREVER);
+	dispatch_semaphore_wait(_semaphore, DISPATCH_TIME_FOREVER);
 }
 
 - (void)_parsePackages:(NSString*)packages {
@@ -153,7 +153,7 @@
 					[currentVal setValue:value forKey:field];
 				}
 			} else {
-				kdmPackage *package = [kdmPackage initWithPackageInformation:currentVal sourceURL:self->_source];
+				kdmPackage *package = [kdmPackage initWithPackageInformation:currentVal sourceURL:_source];
 				if (![self.packages containsObject:package] && [currentVal count] >= 3) {
 					[self.packages addObject:package];
 					
@@ -166,7 +166,7 @@
 						dependString = [[dependString substringToIndex:[dependString length] - 1] mutableCopy];
 					}
 					
-					[self->_db inDatabase:^(FMDatabase *db) {
+					[_db inDatabase:^(FMDatabase *db) {
 						[db executeUpdate:[NSString stringWithFormat:@"INSERT INTO `packages` VALUES ('%@', '%@', '%@', '%@', '%d','%@', '%@',  '%d', '%@', '%@', '%@', '%@', '%@', '%@', '%@', '%@')", package.sourceURL, package.packageID, package.version, package.maintainer, package.installedSize, dependString, [package.fileURL stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@/", package.sourceURL] withString:@""], package.size, package.md5Sum, package.sha1Sum, package.sha256Sum, package.section, package.pkgDescription, package.author, package.icon, package.packageName]];
 					}];
 					
@@ -198,18 +198,18 @@
 }
 
 - (NSString*)source {
-	return self->_source;
+	return _source;
 }
 
 - (NSMutableArray*)packages {
-	return self->_packages;
+	return _packages;
 }
 
 - (NSMutableArray*)installedPackages {
-	return self->_installedPackages;
+	return _installedPackages;
 }
 
 - (ReleaseStruct)rel {
-	return self->_rel;
+	return _rel;
 }
 @end
