@@ -21,11 +21,14 @@ typedef struct {
 	NSString *_source;
 	NSMutableArray *_packages;
 	ReleaseStruct _rel;
+	NSMutableArray *_installedPackages;
 }
 + (kdmSource*)initWithSourceURL:(NSString*)url;
 + (kdmSource*)initWithCache:(NSDictionary*)info;
 - (kdmPackage*)findPackageByIdentifier:(NSString*)identifier;
+- (kdmPackage*)dependencyWithIdentifier:(NSString*)identifier;
 - (NSString*)source;
 - (NSMutableArray*)packages;
+- (NSMutableArray*)installedPackages;
 - (ReleaseStruct)rel;
 @end

@@ -25,10 +25,14 @@
 		[this setup];
 	} else if ([args[1] isEqualToString:@"update"]) {
 		[this update];
+	} else if ([args[1] isEqualToString:@"autoremove"]) {
+		[this autoremove];
 	} else if ([args[1] isEqualToString:@"check"]) {
 		[this check:args[2]];
 	} else if ([args[1] isEqualToString:@"install"]) {
-		[this install:args[2]];
+		[this install:args[2] type:@"package"];
+	} else if ([args[1] isEqualToString:@"remove"]) {
+		[this remove:args[2]];
 	}
 	
 	return this;
@@ -67,6 +71,14 @@
 			[dict setObject:[s_ stringForColumn:@"packageName"] forKey:@"Name"];
 			
 			kdmPackage *package = [kdmPackage initWithPackageInformation:dict sourceURL:[s_ stringForColumn:@"sourceURL"]];
+			
+			FMResultSet *_s = [self->_db executeQuery:@"SELECT * FROM installed"];
+			while ([_s next]) {
+				if ([package.packageID isEqualToString:[_s stringForColumn:@"packageID"]]) {
+					[source.installedPackages addObject:package];
+				}
+			}
+			
 			[source.packages addObject:package];
 		}
 		
@@ -138,27 +150,100 @@
 	LOG("%s was not found", [identifier UTF8String]);
 }
 
-- (void)install:(NSString*)identifier {
+- (void)install:(NSString*)identifier type:(NSString*)type {
+	[self->_db open];
+	[self->_db executeUpdate:@"CREATE TABLE IF NOT EXISTS `installed` ( `packageID` TEXT, `type` TEXT );"];
+	[self->_db close];
+	
 	for (kdmSource *source in self.sources) {
 		kdmPackage *pkg = [source findPackageByIdentifier:identifier];
 		
 		if (pkg) {
 			for (NSString *depend in pkg.dependencies) {
-				[self install:depend];
+				[self install:depend type:@"dependency"];
 			}
 
 			libdpkg_objc *dpkg = [[libdpkg_objc alloc] init];
-			
 			dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+			
 			[dpkg dpkg_download:pkg.fileURL name:[NSString stringWithFormat:@"%@-%@.deb", pkg.packageID, pkg.version] completion:^(struct dpkg_result result) {
 				[dpkg dpkg_install:[dpkg.dpkg_path stringByAppendingPathComponent:[NSString stringWithFormat:@"%@-%@.deb", pkg.packageID, pkg.version]] completion:^(struct dpkg_result result) {
-					LOG("%s", result.error);
+					
+					if (result.result == 1) {
+						LOG("Successfully installed %s", [pkg.packageName UTF8String]);
+						[self->_db open];
+						[self->_db executeUpdate:[NSString stringWithFormat:@"INSERT INTO `installed` VALUES('%@', '%@')", pkg.packageID, type]];
+						[self->_db close];
+					} else {
+						LOG("%s install failed", [pkg.packageName UTF8String]);
+					}
+					
 					dispatch_semaphore_signal(semaphore);
 				}];
 			}];
 			dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+			break;
 		}
 	}
+}
+
+- (void)remove:(NSString*)identifier {
+	for (kdmSource *source in self.sources) {
+		kdmPackage *pkg = [source findPackageByIdentifier:identifier];
+		
+		if (pkg) {
+			libdpkg_objc *dpkg = [[libdpkg_objc alloc] init];
+			dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+
+			[dpkg dpkg_remove:identifier completion:^(struct dpkg_result result) {
+				if (result.result == 1) {
+					LOG("Successfully removed %s", [pkg.packageName UTF8String]);
+					[self->_db open];
+					[self->_db executeUpdate:[NSString stringWithFormat:@"DELETE FROM `installed` WHERE packageID='%@'", pkg.packageID]];
+					[self->_db close];
+				} else {
+					LOG("Could not remove %s", [pkg.packageName UTF8String]);
+					LOG("Error:\n%s", result.output);
+				}
+				dispatch_semaphore_signal(semaphore);
+			}];
+			dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+			break;
+		}
+	}
+}
+
+- (void)autoremove {
+	[self->_db open];
+	FMResultSet *s_ = [self->_db executeQuery:@"SELECT * FROM installed"];
+	
+	NSMutableArray *dependencies = [[NSMutableArray alloc] init];
+	
+	while ([s_ next]) {
+		if ([[s_ stringForColumn:@"type"] isEqualToString:@"dependency"]) {
+			[dependencies addObject:[s_ stringForColumn:@"packageID"]];
+		}
+	}
+	
+	NSMutableArray *foundPkgs = [[NSMutableArray alloc] init];
+	for (kdmSource *source in self.sources) {
+		for (NSString *identifier in dependencies) {
+			kdmPackage *pkg = [source dependencyWithIdentifier:identifier];
+			if (!pkg && ![foundPkgs containsObject:identifier]) {
+				[foundPkgs addObject:identifier];
+			} else if (pkg && [foundPkgs containsObject:identifier]) {
+				[foundPkgs removeObject:identifier];
+			}
+		}
+	}
+	
+	if ([foundPkgs count] > 0) {
+		for (NSString *identifier in foundPkgs) {
+			[self remove:identifier];
+		}
+	}
+	
+	[self->_db close];
 }
 
 @end

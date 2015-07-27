@@ -25,6 +25,7 @@
 	[this->_manager.responseSerializer setAcceptableContentTypes:acceptableTypes];
 	
 	this->_packages = [[NSMutableArray alloc] init];
+	this->_installedPackages = [[NSMutableArray alloc] init];
 	
 	[this parseRelease];
 	[this parsePackages];
@@ -44,6 +45,7 @@
 	this->_rel = rel;
 	this->_source = [info objectForKey:@"Source"];
 	this->_packages = [[NSMutableArray alloc] init];
+	this->_installedPackages = [[NSMutableArray alloc] init];
 	
 	return this;
 }
@@ -153,12 +155,26 @@
 	return nil;
 }
 
+- (kdmPackage*)dependencyWithIdentifier:(NSString*)identifier {
+	for (kdmPackage *package in self.installedPackages) {
+		if ([package.dependencies containsObject:identifier]) {
+			return package;
+		}
+	}
+	
+	return nil;
+}
+
 - (NSString*)source {
 	return self->_source;
 }
 
 - (NSMutableArray*)packages {
 	return self->_packages;
+}
+
+- (NSMutableArray*)installedPackages {
+	return self->_installedPackages;
 }
 
 - (ReleaseStruct)rel {
