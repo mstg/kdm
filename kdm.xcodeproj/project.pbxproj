@@ -1,0 +1,493 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		45AAF2B81B65B676000B435E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 45AAF2B71B65B676000B435E /* main.m */; };
+		45C1C5E71B6616B200E16C54 /* decompress.m in Sources */ = {isa = PBXBuildFile; fileRef = 45C1C5E61B6616B200E16C54 /* decompress.m */; };
+		45C1C5F91B6617D600E16C54 /* libarchive.3.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 45C1C5F81B6617CD00E16C54 /* libarchive.3.a */; };
+		45C1C5FD1B66180100E16C54 /* libbz2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 45C1C5FC1B66180100E16C54 /* libbz2.tbd */; };
+		45C1C5FF1B66180F00E16C54 /* liblzma.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 45C1C5FE1B66180F00E16C54 /* liblzma.tbd */; };
+		45C1C6011B66181600E16C54 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 45C1C6001B66181600E16C54 /* libz.tbd */; };
+		45C1C6031B66181F00E16C54 /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 45C1C6021B66181F00E16C54 /* libiconv.tbd */; };
+		45C1C6E41B66524700E16C54 /* libdpkg_objc.m in Sources */ = {isa = PBXBuildFile; fileRef = 45C1C6E11B66524700E16C54 /* libdpkg_objc.m */; };
+		45EFE6661B65C6A20099C894 /* kdmArgs.m in Sources */ = {isa = PBXBuildFile; fileRef = 45EFE6651B65C6A20099C894 /* kdmArgs.m */; };
+		45EFE66A1B65D2C20099C894 /* kdmSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 45EFE6691B65D2C20099C894 /* kdmSource.m */; };
+		45EFE66E1B65D3030099C894 /* kdmPackage.m in Sources */ = {isa = PBXBuildFile; fileRef = 45EFE66D1B65D3030099C894 /* kdmPackage.m */; };
+		D214184F041F2519C1467412 /* libPods-kdm.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 26286B5C672FD3D6906E48BD /* libPods-kdm.a */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		45AAF2B01B65B676000B435E /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		03112AAE6853E015496ABB6A /* Pods-kdm.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-kdm.release.xcconfig"; path = "Pods/Target Support Files/Pods-kdm/Pods-kdm.release.xcconfig"; sourceTree = "<group>"; };
+		2611383D56E022EFC6165824 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		26286B5C672FD3D6906E48BD /* libPods-kdm.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-kdm.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		45AAF2B21B65B676000B435E /* kdm */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = kdm; sourceTree = BUILT_PRODUCTS_DIR; };
+		45AAF2B61B65B676000B435E /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; name = .gitignore; path = ../.gitignore; sourceTree = "<group>"; };
+		45AAF2B71B65B676000B435E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		45AAF2D31B65B917000B435E /* libArgumentParser-Static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libArgumentParser-Static.a"; path = "kdm/ArgumentParser/build/Debug/libArgumentParser-Static.a"; sourceTree = "<group>"; };
+		45C1C5E51B6616B200E16C54 /* decompress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = decompress.h; sourceTree = "<group>"; };
+		45C1C5E61B6616B200E16C54 /* decompress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = decompress.m; sourceTree = "<group>"; };
+		45C1C5EB1B66172300E16C54 /* archive.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = archive.h; sourceTree = "<group>"; };
+		45C1C5EC1B66172300E16C54 /* archive_entry.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = archive_entry.h; sourceTree = "<group>"; };
+		45C1C5ED1B66172300E16C54 /* libarchive.3.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libarchive.3.a; sourceTree = "<group>"; };
+		45C1C5EE1B66177B00E16C54 /* libarchive.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libarchive.tbd; path = usr/lib/libarchive.tbd; sourceTree = SDKROOT; };
+		45C1C5F11B6617A500E16C54 /* libarchive.2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libarchive.2.tbd; path = usr/lib/libarchive.2.tbd; sourceTree = SDKROOT; };
+		45C1C5F61B6617CD00E16C54 /* archive.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = archive.h; sourceTree = "<group>"; };
+		45C1C5F71B6617CD00E16C54 /* archive_entry.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = archive_entry.h; sourceTree = "<group>"; };
+		45C1C5F81B6617CD00E16C54 /* libarchive.3.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libarchive.3.a; sourceTree = "<group>"; };
+		45C1C5FC1B66180100E16C54 /* libbz2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libbz2.tbd; path = usr/lib/libbz2.tbd; sourceTree = SDKROOT; };
+		45C1C5FE1B66180F00E16C54 /* liblzma.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = liblzma.tbd; path = usr/lib/liblzma.tbd; sourceTree = SDKROOT; };
+		45C1C6001B66181600E16C54 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		45C1C6021B66181F00E16C54 /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = usr/lib/libiconv.tbd; sourceTree = SDKROOT; };
+		45C1C6DD1B662F4400E16C54 /* AFNetworking.xcworkspace */ = {isa = PBXFileReference; lastKnownFileType = wrapper.workspace; name = AFNetworking.xcworkspace; path = kdm/external/AFNetworking/AFNetworking.xcworkspace; sourceTree = SOURCE_ROOT; };
+		45C1C6DF1B66524700E16C54 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		45C1C6E01B66524700E16C54 /* libdpkg_objc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = libdpkg_objc.h; sourceTree = "<group>"; };
+		45C1C6E11B66524700E16C54 /* libdpkg_objc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = libdpkg_objc.m; sourceTree = "<group>"; };
+		45C1C6E21B66524700E16C54 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		45C1C6E31B66524700E16C54 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		45EFE65E1B65BDEC0099C894 /* defines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = defines.h; sourceTree = "<group>"; };
+		45EFE6641B65C6A20099C894 /* kdmArgs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = kdmArgs.h; sourceTree = "<group>"; };
+		45EFE6651B65C6A20099C894 /* kdmArgs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = kdmArgs.m; sourceTree = "<group>"; };
+		45EFE6681B65D2C20099C894 /* kdmSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = kdmSource.h; sourceTree = "<group>"; };
+		45EFE6691B65D2C20099C894 /* kdmSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = kdmSource.m; sourceTree = "<group>"; };
+		45EFE66C1B65D3030099C894 /* kdmPackage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = kdmPackage.h; sourceTree = "<group>"; };
+		45EFE66D1B65D3030099C894 /* kdmPackage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = kdmPackage.m; sourceTree = "<group>"; };
+		DEB2A5E0BE304103F2956EF1 /* Pods-kdm.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-kdm.debug.xcconfig"; path = "Pods/Target Support Files/Pods-kdm/Pods-kdm.debug.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		45AAF2AF1B65B676000B435E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				45C1C6031B66181F00E16C54 /* libiconv.tbd in Frameworks */,
+				45C1C6011B66181600E16C54 /* libz.tbd in Frameworks */,
+				45C1C5FF1B66180F00E16C54 /* liblzma.tbd in Frameworks */,
+				45C1C5FD1B66180100E16C54 /* libbz2.tbd in Frameworks */,
+				45C1C5F91B6617D600E16C54 /* libarchive.3.a in Frameworks */,
+				D214184F041F2519C1467412 /* libPods-kdm.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		45AAF2A91B65B676000B435E = {
+			isa = PBXGroup;
+			children = (
+				45AAF2B41B65B676000B435E /* kdm */,
+				45AAF2B31B65B676000B435E /* Products */,
+				D2A3F8BFEDB8160BBE36FD48 /* Frameworks */,
+				FE0F91BC9B6EED9C5A6EFA75 /* Pods */,
+			);
+			sourceTree = "<group>";
+		};
+		45AAF2B31B65B676000B435E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				45AAF2B21B65B676000B435E /* kdm */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		45AAF2B41B65B676000B435E /* kdm */ = {
+			isa = PBXGroup;
+			children = (
+				45C1C5E81B6616F900E16C54 /* external */,
+				45EFE66B1B65D2FA0099C894 /* kdmPackage */,
+				45EFE6671B65D2B90099C894 /* kdmSource */,
+				45EFE6631B65C6820099C894 /* kdmCommands */,
+				45AAF2B71B65B676000B435E /* main.m */,
+				45EFE65E1B65BDEC0099C894 /* defines.h */,
+				45C1C5E51B6616B200E16C54 /* decompress.h */,
+				45C1C5E61B6616B200E16C54 /* decompress.m */,
+				45AAF2B51B65B676000B435E /* Supporting Files */,
+			);
+			path = kdm;
+			sourceTree = "<group>";
+		};
+		45AAF2B51B65B676000B435E /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				45AAF2B61B65B676000B435E /* .gitignore */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		45C1C5E81B6616F900E16C54 /* external */ = {
+			isa = PBXGroup;
+			children = (
+				45C1C6DE1B66524700E16C54 /* libdpkg-objc */,
+				45C1C5E91B66172300E16C54 /* libarchive */,
+			);
+			name = external;
+			sourceTree = "<group>";
+		};
+		45C1C5E91B66172300E16C54 /* libarchive */ = {
+			isa = PBXGroup;
+			children = (
+				45C1C6DD1B662F4400E16C54 /* AFNetworking.xcworkspace */,
+				45C1C5EA1B66172300E16C54 /* include */,
+				45C1C5ED1B66172300E16C54 /* libarchive.3.a */,
+			);
+			name = libarchive;
+			path = external/libarchive;
+			sourceTree = "<group>";
+		};
+		45C1C5EA1B66172300E16C54 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				45C1C5EB1B66172300E16C54 /* archive.h */,
+				45C1C5EC1B66172300E16C54 /* archive_entry.h */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		45C1C5F41B6617CD00E16C54 /* libarchive */ = {
+			isa = PBXGroup;
+			children = (
+				45C1C5F51B6617CD00E16C54 /* include */,
+				45C1C5F81B6617CD00E16C54 /* libarchive.3.a */,
+			);
+			name = libarchive;
+			path = kdm/external/libarchive;
+			sourceTree = "<group>";
+		};
+		45C1C5F51B6617CD00E16C54 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				45C1C5F61B6617CD00E16C54 /* archive.h */,
+				45C1C5F71B6617CD00E16C54 /* archive_entry.h */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		45C1C6DE1B66524700E16C54 /* libdpkg-objc */ = {
+			isa = PBXGroup;
+			children = (
+				45C1C6DF1B66524700E16C54 /* .gitignore */,
+				45C1C6E01B66524700E16C54 /* libdpkg_objc.h */,
+				45C1C6E11B66524700E16C54 /* libdpkg_objc.m */,
+				45C1C6E21B66524700E16C54 /* LICENSE */,
+				45C1C6E31B66524700E16C54 /* README.md */,
+			);
+			name = "libdpkg-objc";
+			path = "external/libdpkg-objc";
+			sourceTree = "<group>";
+		};
+		45EFE6631B65C6820099C894 /* kdmCommands */ = {
+			isa = PBXGroup;
+			children = (
+				45EFE6641B65C6A20099C894 /* kdmArgs.h */,
+				45EFE6651B65C6A20099C894 /* kdmArgs.m */,
+			);
+			name = kdmCommands;
+			sourceTree = "<group>";
+		};
+		45EFE6671B65D2B90099C894 /* kdmSource */ = {
+			isa = PBXGroup;
+			children = (
+				45EFE6681B65D2C20099C894 /* kdmSource.h */,
+				45EFE6691B65D2C20099C894 /* kdmSource.m */,
+			);
+			name = kdmSource;
+			sourceTree = "<group>";
+		};
+		45EFE66B1B65D2FA0099C894 /* kdmPackage */ = {
+			isa = PBXGroup;
+			children = (
+				45EFE66C1B65D3030099C894 /* kdmPackage.h */,
+				45EFE66D1B65D3030099C894 /* kdmPackage.m */,
+			);
+			name = kdmPackage;
+			sourceTree = "<group>";
+		};
+		D2A3F8BFEDB8160BBE36FD48 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				45C1C6021B66181F00E16C54 /* libiconv.tbd */,
+				45C1C6001B66181600E16C54 /* libz.tbd */,
+				45C1C5FE1B66180F00E16C54 /* liblzma.tbd */,
+				45C1C5FC1B66180100E16C54 /* libbz2.tbd */,
+				45C1C5F41B6617CD00E16C54 /* libarchive */,
+				45C1C5F11B6617A500E16C54 /* libarchive.2.tbd */,
+				45C1C5EE1B66177B00E16C54 /* libarchive.tbd */,
+				45AAF2D31B65B917000B435E /* libArgumentParser-Static.a */,
+				2611383D56E022EFC6165824 /* libPods.a */,
+				26286B5C672FD3D6906E48BD /* libPods-kdm.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		FE0F91BC9B6EED9C5A6EFA75 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				DEB2A5E0BE304103F2956EF1 /* Pods-kdm.debug.xcconfig */,
+				03112AAE6853E015496ABB6A /* Pods-kdm.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		45AAF2B11B65B676000B435E /* kdm */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 45AAF2BB1B65B676000B435E /* Build configuration list for PBXNativeTarget "kdm" */;
+			buildPhases = (
+				3CC5FB94F4D7A39EF6F600F9 /* Check Pods Manifest.lock */,
+				45AAF2AE1B65B676000B435E /* Sources */,
+				45AAF2AF1B65B676000B435E /* Frameworks */,
+				45AAF2B01B65B676000B435E /* CopyFiles */,
+				96BE10855DD0AF7AF58E8105 /* Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = kdm;
+			productName = kdm;
+			productReference = 45AAF2B21B65B676000B435E /* kdm */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		45AAF2AA1B65B676000B435E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0700;
+				ORGANIZATIONNAME = "Mustafa Gezen";
+				TargetAttributes = {
+					45AAF2B11B65B676000B435E = {
+						CreatedOnToolsVersion = 7.0;
+					};
+				};
+			};
+			buildConfigurationList = 45AAF2AD1B65B676000B435E /* Build configuration list for PBXProject "kdm" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 45AAF2A91B65B676000B435E;
+			productRefGroup = 45AAF2B31B65B676000B435E /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				45AAF2B11B65B676000B435E /* kdm */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		3CC5FB94F4D7A39EF6F600F9 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		96BE10855DD0AF7AF58E8105 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-kdm/Pods-kdm-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		45AAF2AE1B65B676000B435E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				45EFE66A1B65D2C20099C894 /* kdmSource.m in Sources */,
+				45C1C6E41B66524700E16C54 /* libdpkg_objc.m in Sources */,
+				45C1C5E71B6616B200E16C54 /* decompress.m in Sources */,
+				45AAF2B81B65B676000B435E /* main.m in Sources */,
+				45EFE6661B65C6A20099C894 /* kdmArgs.m in Sources */,
+				45EFE66E1B65D3030099C894 /* kdmPackage.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		45AAF2B91B65B676000B435E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		45AAF2BA1B65B676000B435E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		45AAF2BC1B65B676000B435E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = DEB2A5E0BE304103F2956EF1 /* Pods-kdm.debug.xcconfig */;
+			buildSettings = {
+				DEPLOYMENT_LOCATION = YES;
+				DEPLOYMENT_POSTPROCESSING = YES;
+				DSTROOT = "";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/kdm/external/libarchive/include",
+				);
+				INSTALL_PATH = "$(SRCROOT)/Builds";
+				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/kdm/external/**";
+				MACOSX_DEPLOYMENT_TARGET = "";
+				OTHER_CFLAGS = "$(inherited)";
+				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = NO;
+			};
+			name = Debug;
+		};
+		45AAF2BD1B65B676000B435E /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 03112AAE6853E015496ABB6A /* Pods-kdm.release.xcconfig */;
+			buildSettings = {
+				DEPLOYMENT_LOCATION = YES;
+				DEPLOYMENT_POSTPROCESSING = YES;
+				DSTROOT = "";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/kdm/external/libarchive/include",
+				);
+				INSTALL_PATH = "$(SRCROOT)/Builds";
+				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/kdm/external/**";
+				MACOSX_DEPLOYMENT_TARGET = "";
+				OTHER_CFLAGS = "$(inherited)";
+				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = NO;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		45AAF2AD1B65B676000B435E /* Build configuration list for PBXProject "kdm" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				45AAF2B91B65B676000B435E /* Debug */,
+				45AAF2BA1B65B676000B435E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		45AAF2BB1B65B676000B435E /* Build configuration list for PBXNativeTarget "kdm" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				45AAF2BC1B65B676000B435E /* Debug */,
+				45AAF2BD1B65B676000B435E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 45AAF2AA1B65B676000B435E /* Project object */;
+}

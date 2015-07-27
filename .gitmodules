@@ -1,0 +1,12 @@
+[submodule "kdm/--force"]
+	path = kdm/--force
+	url = https://github.com/mysteriouspants/ArgumentParser.git
+[submodule "kdm/ArgumentParser"]
+	path = kdm/ArgumentParser
+	url = https://github.com/mysteriouspants/ArgumentParser.git
+[submodule "kdm/external/AFNetworking"]
+	path = kdm/external/AFNetworking
+	url = https://github.com/AFNetworking/AFNetworking.git
+[submodule "kdm/external/libdpkg-objc"]
+	path = kdm/external/libdpkg-objc
+	url = https://github.com/mstg/libdpkg-objc.git
