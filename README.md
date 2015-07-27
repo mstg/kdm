@@ -5,7 +5,8 @@ simple dependency manager (which is also a package manager), but it sucks
 ```
 pod install
 Install dpkg
-Build kpm
+Build kdm
+Make sure you have write permissions in /usr/local
 ```
 
 # Usage
