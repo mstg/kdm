@@ -107,7 +107,7 @@
 	if (error) {
 		LOG("Permission error - fix your /usr/local dir permissions");
 	} else  {
-		NSString *content = @"http://repo.alexzielenski.com";
+		NSString *content = @"http://repokdm.mstg.io";
 		NSData *fileContents = [content dataUsingEncoding:NSUTF8StringEncoding];
 		[[NSFileManager defaultManager] createFileAtPath:kdmSources contents:fileContents attributes:nil];
 		FMDatabase *db = [[FMDatabase alloc] initWithPath:[kdmCacheFolder stringByAppendingPathComponent:@"cache.db"]];
